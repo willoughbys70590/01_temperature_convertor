@@ -33,7 +33,7 @@ class Converter:
 
 
 class Help:
-    def __int__(self, partner):
+    def __init__(self, partner):
 
         background = "Orange"
 
