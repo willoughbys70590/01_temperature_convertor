@@ -28,12 +28,12 @@ class Converter:
 
     def help(self):
         print("you asked for help")
-        Help()
-        # get_help.help_text.configure(text="Help text goes here")
+        get_help = Help(self)
+        get_help.help_text.configure(text="Help text goes here")
 
 
 class Help:
-    def __int__(self, partner):
+    def __init__(self, partner):
 
         background = "Orange"
 
@@ -43,8 +43,11 @@ class Help:
         # set up child window (ie: help box)
         self.help_box =Toplevel()
 
+        #If users press cross at top, closes help and 'releases' help button
+        self.help_box.protocol('WM_DELETE_WINDOW', partial(self.close_help,partner))
+
         # set up GUI frame
-        self.help_frame = Frame(self.help_box, bg=background)
+        self.help_frame = Frame(self.help_box, width=300, bg=background)
         self.help_frame.grid()
 
         # set up Help heading (row 0)
@@ -54,11 +57,12 @@ class Help:
 
          # Help text (label, row 1)
         self.help_text = Label(self.help_frame, text="",
-                               justify=LEFT, width=40, b=background, wrap=250)
-        self.help_text.grid(colum=0, row=1)
+                               justify=LEFT, width=40, bg=background, wrap=250)
+        self.help_text.grid(row=1)
 
         # Dismiss button (row2)
-        self.dismiss_btn =Button(self.help_frame, text="Dismiss", width=10, bg="orange", font="arial 10 bold",
+        self.dismiss_btn =Button(self.help_frame, text="Dismiss",
+                                 width=10, bg="orange", font="arial 10 bold",
                                  command=partial(self.close_help, partner))
         self.dismiss_btn.grid(row=2, pady=10)
 
