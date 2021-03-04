@@ -1,1 +1,4 @@
+language = "python3"
+run = ""
+
 print("hello world")
