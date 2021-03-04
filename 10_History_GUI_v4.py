@@ -18,7 +18,7 @@ class Converter:
             '100 degrees C is 37.8 degrees F']
 
     # Converter Main Screen GUI
-    self.converter_frame = Fram(width=300,
+    self.converter_frame = Frame(width=300,
                                 height=300,
                                 bg=background_color,
                                 pady=10)
@@ -92,7 +92,7 @@ class history:
     # History output goes here ... (row 2)
 
     # Export / Dissmiss Button Frame (row 3)
-    self.export_dismiss_frame = Frame(Self.history_frame)
+    self.export_dismiss_frame = Frame(self.history_frame)
     self.export_dismiss_frame.grid(row=3, pady=10)
 
     # Export Button
@@ -105,8 +105,8 @@ class history:
     self.dismiss_button = Button(self.export_dismiss_frame,
                                 text="Dismiss",
                                 font="Arial 12 bold",
-                                command=partial(self.close))
-    self.dismiss_button.grid(row0, column=1)
+                                command=partial(self.close_history))
+    self.dismiss_button.grid(row=0, column=1)
 
   def close_history(self, partner):
     # Put history button back to normal...
