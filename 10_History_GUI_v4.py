@@ -11,13 +11,12 @@ class Converter:
         background_color = "light blue"
 
         # In actual program this is blank and is populated with user calculations
-        self.all_calc_list = ['0 degrees C is -17.8 degrees F',
-                          '0 degrees C is 32 degrees F',
-                          '40 degrees C is 104 degrees F',
-                          '40 degrees C is 4.4 degrees F',
-                          '12 degrees C is 53.6 degrees F',
-                          '24 degrees C is 75.2 degrees F',
-                          '100 degrees C is 37.8 degrees F']
+        self.all_calc_list = ['5 degrees C is -17.2 degrees F',
+                          '6 degrees C is -16.7 degrees F',
+                          '7 degrees C is -16.1 degrees F',
+                          '8 degrees C is -15.8 degrees F',
+                          '9 degrees C is -51.1 degrees F',
+                            ]
 
         # Converter Main Screen GUI
         self.converter_frame = Frame(width=300, height=300, bg=background_color,
@@ -37,16 +36,15 @@ class Converter:
                                     font=("Arial", "14"),
                                     padx=10,
                                     pady=10,
-                                    command=self.history)
+                                    command=lambda: self.history(self.all_calc_list))
         self.history_button.grid(row=1)
 
-  def history(self):
-    get_history = History(self)
-    get_history.history_text.configure(text="History text goes here")
+  def history(self, calc_history):
+      History(self, calc_history)
 
 
 class History:
-  def __init__(self, partner):
+  def __init__(self, partner, calc_history):
 
     background = "#a9ef99"  # Pale green
 
@@ -74,20 +72,30 @@ class History:
     # history text (label, row 1)
     self.history_text = Label(self.history_frame,
                                     text="Here are your most recent"
-                                          "Calculations. please use the "
+                                          " Calculations. please use the "
                                           "export button to create a text "
                                          "file of all your Calculations for "
                                           "This session",
                                            wrap=250,
                                     font="arial 10 italic",
-                                    justify=LEFT,
-                                    bg=background,
-                                    fg="maroon",
-                                    padx=10,
-                                    pady=10)
+                                    justify=LEFT, bg=background, fg="maroon",
+                                    padx=10, pady=10)
     self.history_text.grid(row=1)
 
     # History output goes here ... (row 2)
+
+    # Generate string from list of calculations...
+    history_string = " "
+
+    if len(calc_history) >= 7:
+        for item in range(0, 7):
+            history_string += calc_history[len(calc_history)
+                                            - item - 1] +"\n"
+
+    # Label to display calculation history to user
+    self.calc_label = Label(self.history_frame, text=history_string,
+                            bg=background,font="Arial 12", justify=LEFT)
+    self.calc_label.grid(row=2)
 
     # Export / Dissmiss Button Frame (row 3)
     self.export_dismiss_frame = Frame(self.history_frame)
