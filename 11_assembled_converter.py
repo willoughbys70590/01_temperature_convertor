@@ -123,9 +123,9 @@ class Converter:
                 self.to_convert_entry.configure(bg=error)
 
             # Add Answer to list for History
-            if answer != "too cold":
+            if answer != "yes":
                 self.all_calc_list.append(answer)
-                print(self.all_calc_list)
+                self.history_button.config(state=NORMAL)
 
         except ValueError:
             self.converted_label.configure(text="Enter a number!!", fg="red")
@@ -217,11 +217,3 @@ class History:
     # Put history button back to normal...
     partner.history_button.config(state=NORMAL)
     self.history_box.destroy()
-
-
-# main routine
-if __name__ == "__main__":
-    root = Tk()
-    root.title("Temperature Converter")
-    something = Converter()
-    root.mainloop()
