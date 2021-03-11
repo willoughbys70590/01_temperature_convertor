@@ -1,7 +1,7 @@
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
-
 import random
+
 
 class Converter:
     def __init__(self):
@@ -9,11 +9,18 @@ class Converter:
         # Formatting varibles
         background_color = "light blue"
 
-        # Initialise list to hold calculation History
-        self.all_calc_list = []
+        # In actual program this is blank and is populated with user calculations
+        self.all_calc_list =  ['5 degrees C is -17.2 degrees F',
+                                '6 degrees C is -16.7 degrees F',
+                                '7 degrees C is -16.1 degrees F',
+                                '8 degrees C is -15.8 degrees F',
+                                '9 degrees C is -15.1 degrees F',
+                               ]
+
+        # self.all_calc_list = []
 
         # converter frame
-        self.converter_frame = Frame(bg=background_color,
+        self.converter_frame = Frame(width=300, height=300, bg=background_color,
                                      pady=10)
 
         self.converter_frame.grid()
@@ -69,12 +76,10 @@ class Converter:
         self.hist_help_frame.grid(row=5, pady=10)
 
         self.calc_hist_button = Button(self.hist_help_frame, font="Arial 12 bold",
-                                       text="Calculation History", width=15,
-                                       command=lambda: self.history(self.all_calc_list))
+                                       text="Calculation History", width=15)
         self.calc_hist_button.grid(row=0, column=0)
 
-        if len(self.all_calc_list) == 0:
-            self.calc_hist_button.config(state=DISABLED)
+        self.calc_hist_button.config(state=DISABLED)
 
         self.help_button = Button(self.hist_help_frame, font="Arial 12 bold",
                                   text="Help", width=5)
@@ -123,9 +128,9 @@ class Converter:
                 self.to_convert_entry.configure(bg=error)
 
             # Add Answer to list for History
-            if answer != "yes":
+            if answer != "too cold":
                 self.all_calc_list.append(answer)
-                self.history_button.config(state=NORMAL)
+                self.calc_hist_button.config(state=NORMAL)
 
         except ValueError:
             self.converted_label.configure(text="Enter a number!!", fg="red")
@@ -142,13 +147,14 @@ class Converter:
     def history(self, calc_history):
         History(self, calc_history)
 
+
 class History:
   def __init__(self, partner, calc_history):
 
     background = "#a9ef99"  # Pale green
 
     # disable history button
-    partner.history_button.config(state=DISABLED)
+    partner.calc_hist_button.config(state=DISABLED)
 
     # set up child window (ie: history box)
     self.history_box = Toplevel()
@@ -217,3 +223,11 @@ class History:
     # Put history button back to normal...
     partner.history_button.config(state=NORMAL)
     self.history_box.destroy()
+
+
+# main routine
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Temperature Converter")
+    something = Converter()
+    root.mainloop()
