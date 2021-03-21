@@ -125,7 +125,9 @@ class Converter:
             # Add Answer to list for History
             if answer != "too cold":
                 self.all_calc_list.append(answer)
+                self.calc_hist_button.config(state=NORMAL)
                 print(self.all_calc_list)
+
 
         except ValueError:
             self.converted_label.configure(text="Enter a number!!", fg="red")
@@ -148,7 +150,7 @@ class History:
     background = "#a9ef99"  # Pale green
 
     # disable history button
-    partner.history_button.config(state=DISABLED)
+    partner.calc_hist_button.config(state=DISABLED)
 
     # set up child window (ie: history box)
     self.history_box = Toplevel()
@@ -184,12 +186,15 @@ class History:
     # History output goes here ... (row 2)
 
     # Generate string from list of calculations...
-    history_string = " "
+    history_string = ""
 
     if len(calc_history) >= 7:
         for item in range(0, 7):
             history_string += calc_history[len(calc_history)
                                             - item - 1] +"\n"
+    else:
+        for item in calc_history:
+            history_string += item + "\n"
 
     # Label to display calculation history to user
     self.calc_label = Label(self.history_frame, text=history_string,
@@ -215,7 +220,7 @@ class History:
 
   def close_history(self, partner):
     # Put history button back to normal...
-    partner.history_button.config(state=NORMAL)
+    partner.calc_hist_button.config(state=NORMAL)
     self.history_box.destroy()
 
 
