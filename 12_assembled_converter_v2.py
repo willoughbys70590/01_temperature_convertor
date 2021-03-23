@@ -310,7 +310,21 @@ class Export:
 
 
     def save_history(self, partner, calc_history):
-        print("you said to save")
+
+        # Regular expression to cheak filename is valid
+        valid_char = "[A-Za-z0-9_]"
+        has_error ="no"
+
+        filename = self.filename_entry.get()
+        print(filename)
+
+        for letter in filename:
+            if re.match(valid_char, letter):
+                continue
+
+            elif letter == " ":
+                problem = (" (no spaces allowed)".format(letter))
+            has_errors 
 
 
     def close_export(self, partner):
