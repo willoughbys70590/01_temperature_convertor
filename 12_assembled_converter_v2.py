@@ -68,7 +68,7 @@ class Converter:
         # Answer label (row 4)
         self.converted_label = Label(self.converter_frame, font="Arial 14 bold",
                                      fg="purple", bg=background_color,
-                                     pady=10, text="Answer will appear here")
+                                     pady=10, text="")
         self.converted_label.grid(row=4)
 
         # History / Help button frame (row 5)
@@ -78,6 +78,7 @@ class Converter:
         self.calc_hist_button = Button(self.hist_help_frame, font="Arial 12 bold",
                                        text="Calculation History", width=15,
                                        command=lambda: self.history(self.all_calc_list))
+
         self.calc_hist_button.grid(row=0, column=0)
 
         if len(self.all_calc_list) == 0:
@@ -120,8 +121,8 @@ class Converter:
                 answer = "Too cold!"
                 has_errors = "yes"
 
-            # Display answer
-             # print(answer)
+                # Display answer
+                # print(answer)
             if has_errors == "no":
                 self.converted_label.configure(text=answer, fg="blue")
                 self.to_convert_entry.configure(bg="white")
@@ -149,11 +150,11 @@ class Converter:
     def history(self, calc_history):
         History(self, calc_history)
 
-
     def help(self):
         # print("you asked for help")
         get_help = Help(self)
         get_help.help_text.configure(text="Help text goes here")
+
 
 class History:
     def __init__(self, partner, calc_history):
@@ -238,8 +239,9 @@ class History:
     def export(self, partner):
         get_export = Export(self)
 
+
 class Export:
-    def __init__(self, calc_history, partner):
+    def __init__(self, partner):
         background = "#a9ef99"  # pale green
 
         # disable export button
@@ -250,7 +252,7 @@ class Export:
 
         # 'releaseds' export button
         self.export_box.protocol('WM_DELETE WINDOW',
-                                partial(self.close_export, partner))
+                                 partial(self.close_export, partner))
 
         # set up GUI frame
         self.export_frame = Frame(self.export_box, width=300, bg=background)
@@ -258,29 +260,29 @@ class Export:
 
         # set up export heading (row 0)
         self.how_heading = Label(self.export_frame,
-                                    text="Export / Instructions",
-                                    font="arial 14 bold", bg=background)
+                                 text="Export / Instructions",
+                                 font="arial 14 bold", bg=background)
         self.how_heading.grid(row=0)
 
         # export Instructions (lable, row 1)
         self.export_text = Label(self.export_frame, text="Enter a filename"
-                                                        "in the box bellow"
-                                                        "and press the save"
-                                                        "button to save your"
-                                                        "calculation history"
-                                                        "to a text file",
-                                justify=LEFT, width=40,
-                                bg=background, wrap=250)
+                                                         "in the box bellow"
+                                                         "and press the save"
+                                                         "button to save your"
+                                                         "calculation history"
+                                                         "to a text file",
+                                 justify=LEFT, width=40,
+                                 bg=background, wrap=250)
         self.export_text = Label(self.export_frame, text="if the filename "
-                                                        "you enter below "
-                                                        "already exists "
-                                                        "its contents will "
-                                                        "be replaced with "
-                                                        "your calculation "
-                                                        "history",
-                                justify=LEFT, bg="#ffafaf", fg="maroon",
-                                font="Arial 10 italic", wrap=225, padx=10,
-                                pady=10)
+                                                         "you enter below "
+                                                         "already exists "
+                                                         "its contents will "
+                                                         "be replaced with "
+                                                         "your calculation "
+                                                         "history",
+                                 justify=LEFT, bg="#ffafaf", fg="maroon",
+                                 font="Arial 10 italic", wrap=225, padx=10,
+                                 pady=10)
         self.export_text.grid(row=2, pady=10)
 
         # filename enter box (row 3)
@@ -290,7 +292,7 @@ class Export:
 
         # Error Message Lables (initially blank, row 4
         self.save_error_label = Label(self.export_frame, text="", fg="maroon",
-                                      bg=background)
+                                    bg=background)
         self.save_error_label.grid(row=4)
 
         # save / cancel frame(row 4)
@@ -299,20 +301,23 @@ class Export:
 
         # save and cancel Buttons (row 0 of save cancel_frame)
         self.save_button = Button(self.save_cancel_frame, text="save",
-                                  command=partial(lambda: self.save_history(partner, calc_history)))
+                                command=partial(lambda: self.save_history(partner, calc_history)))
         self.save_button.grid(row=0, column=0)
 
         self.cancel_button = Button(self.save_cancel_frame, text="Cancel",
-                                command=partial(self.close_export, partner))
+                                    command=partial(self.close_export, partner))
         self.cancel_button.grid(row=0, column=1)
+
 
     def save_history(self, partner, calc_history):
         print("you said to save")
+
 
     def close_export(self, partner):
         # put export button back to normal..
         partner.export_button.config(state=NORMAL)
         self.export_box.destroy()
+
 
 class Help:
     def __init__(self, partner):
@@ -333,18 +338,18 @@ class Help:
 
         # set up Help heading (row 0)
         self.how_heading = Label(self.help_frame, text="Help / instructions",
-                                font="arial 10 bold", bg=background)
+                                 font="arial 10 bold", bg=background)
         self.how_heading.grid(row=0)
 
         # Help text (label, row 1)
         self.help_text = Label(self.help_frame, text="",
-                            justify=LEFT, width=40, bg=background, wrap=250)
+                               justify=LEFT, width=40, bg=background, wrap=250)
         self.help_text.grid(row=1)
 
         # Dismiss button (row2)
         self.dismiss_btn = Button(self.help_frame, text="Dismiss",
-                                width=10, bg="orange", font="arial 10 bold",
-                                command=partial(self.close_help, partner))
+                                  width=10, bg="orange", font="arial 10 bold",
+                                  command=partial(self.close_help, partner))
         self.dismiss_btn.grid(row=2, pady=10)
 
     def close_help(self, partner):
