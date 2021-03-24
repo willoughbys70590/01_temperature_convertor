@@ -68,7 +68,7 @@ class Converter:
         # Answer label (row 4)
         self.converted_label = Label(self.converter_frame, font="Arial 14 bold",
                                      fg="purple", bg=background_color,
-                                     pady=10, text="")
+                                     pady=10, text="Answer will appear here")
         self.converted_label.grid(row=4)
 
         # History / Help button frame (row 5)
@@ -131,7 +131,7 @@ class Converter:
                 self.to_convert_entry.configure(bg=error)
 
             # Add Answer to list for History
-            if answer != "too cold":
+            if has_errors == "no":
                 self.all_calc_list.append(answer)
                 self.calc_hist_button.config(state=NORMAL)
 
@@ -151,9 +151,16 @@ class Converter:
         History(self, calc_history)
 
     def help(self):
-        # print("you asked for help")
         get_help = Help(self)
-        get_help.help_text.configure(text="Help text goes here")
+        get_help.help_text.configure(text="Please enter a number in the box "
+                                          "and then push one of the buttons "
+                                          "to convert the number to either "
+                                          "degrees C or degrees F.\n\n"
+                                          "The calculations History area shows "
+                                          "up to seven past calculations "
+                                          "(most recent at the top). \n\n You can "
+                                          "also export your recent full calculation "
+                                          "history to a text file if desired. ")
 
 
 class History:
@@ -221,7 +228,7 @@ class History:
         self.export_button = Button(self.export_dismiss_frame,
                                     text="Export",
                                     font="Arial 12 bold",
-                                    command=partial(self.export, partner))
+                                    command=partial(self.export, partner, calc_history))
         self.export_button.grid(row=0, column=0)
 
         # Dismiss Button
@@ -236,12 +243,12 @@ class History:
         partner.calc_hist_button.config(state=NORMAL)
         self.history_box.destroy()
 
-    def export(self, partner):
-        get_export = Export(self)
+    def export(self, partner, calc_history):
+        get_export = Export(self, calc_history)
 
 
 class Export:
-    def __init__(self, partner):
+    def __init__(self, partner, calc_history):
         background = "#a9ef99"  # pale green
 
         # disable export button
@@ -290,9 +297,9 @@ class Export:
                                     font="Arial 14 bold", justify=CENTER)
         self.filename_entry.grid(row=3, pady=10)
 
-        # Error Message Lables (initially blank, row 4
+        # Error Message Lables (initially blank, row 4)
         self.save_error_label = Label(self.export_frame, text="", fg="maroon",
-                                    bg=background)
+                                      bg=background)
         self.save_error_label.grid(row=4)
 
         # save / cancel frame(row 4)
@@ -301,19 +308,18 @@ class Export:
 
         # save and cancel Buttons (row 0 of save cancel_frame)
         self.save_button = Button(self.save_cancel_frame, text="save",
-                                command=partial(lambda: self.save_history(partner, calc_history)))
+                                  command=partial(lambda: self.save_history(partner, calc_history)))
         self.save_button.grid(row=0, column=0)
 
         self.cancel_button = Button(self.save_cancel_frame, text="Cancel",
-                                    command=partial(self.close_export, partner))
+                                    command=partial(self.close_export, partner,))
         self.cancel_button.grid(row=0, column=1)
-
 
     def save_history(self, partner, calc_history):
 
         # Regular expression to cheak filename is valid
         valid_char = "[A-Za-z0-9_]"
-        has_error ="no"
+        has_error = "no"
 
         filename = self.filename_entry.get()
         print(filename)
@@ -323,9 +329,44 @@ class Export:
                 continue
 
             elif letter == " ":
-                problem = (" (no spaces allowed)".format(letter))
-            has_errors 
+                problem = "(no spaces allowed)"
 
+            else:
+                problem = ("(no {} 's allowed)".format(letter))
+            has_errors = "yes"
+            break
+
+        if filename == "":
+            problem = "cant be blank"
+            has_errors = "yes"
+
+        if has_error == "yes":
+            # Display error Message
+            self.save_error_label.config(text="Invalid filename - {}".format(problem))
+            # Change entry background to pink
+            self.filename_entry.config(bg="#ffafaf")
+            print()
+
+        else:
+            # if there are no errors, generate text file and then close dialogue
+            # add .txt suffix!
+            filename = filename + ".txt"
+
+            # create file to hold data
+            f = open(filename, "w+")
+
+            # heading for text file...
+            f.write("Temperature Conversion History\n\n")
+
+            # Add new line at the end of each item
+            for item in calc_history:
+                f.write(item + "\n")
+
+            # close File
+            f.close()
+
+            # Close dialogue
+            self.close_export(partner)
 
     def close_export(self, partner):
         # put export button back to normal..
